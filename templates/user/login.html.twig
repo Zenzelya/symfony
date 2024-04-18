@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{# ... #}
+
+{% block content %}
+    <div class="container mx-auto">
+    {% if error %}
+        <div class="text-red-500">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form action="{{ path('app_login') }}" method="post" class="space-y-4">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <label for="username" class="block text-gray-700">Email:</label>
+        <input type="text" id="username" name="_username" value="{{ last_username }}" class="block w-full border rounded p-2">
+
+        <label for="password" class="block text-gray-700">Password:</label>
+        <input type="password" id="password" name="_password" class="block w-full border rounded p-2">
+
+        {# If you want to control the URL the user is redirected to on success
+        <input type="hidden" name="_target_path" value="/account"> #}
+
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Login</button>
+    </form>
+    <a href="{{ url('app_register') }}" class="block mt-4 text-blue-500">Registration</a>
+    </div>
+{% endblock %}

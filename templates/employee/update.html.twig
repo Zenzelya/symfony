@@ -1,0 +1,26 @@
+{% block content %}
+    <div class="max-w-md mx-auto mt-8">
+        <form action="{{ path('app_employee_edit', {'id': id }) }}" method="post" class="space-y-4">
+            {{ form_start(form) }}
+            <div>
+                {{ form_row(form.fullName) }}
+            </div>
+            <div>
+                {{ form_row(form.position) }}
+            </div>
+            <div>
+                {{ form_row(form.hireDate) }}
+            </div>
+            <div>
+                {{ form_row(form.salary) }}
+            </div>
+            <div>
+                {{ form_row(form.manager) }}
+            </div>
+            <div>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Update Employee</button>
+            </div>
+            {{ form_end(form) }}
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello EmployeeController!{% endblock %}
+{# templates/employee/tree.html.twig #}
+{# templates/employee/table.html.twig #}
+{# templates/employee/update.html.twig #}
+{% block content %}
+    <div class="container mx-auto border-4 rounded border-transparent">
+        {% if step == 0 %}
+            {{ include('employee/tree.html.twig', {'employees': employees, 'url': url }) }}
+        {% endif %}
+        {% if step == 1 %}
+            {{ include('employee/table.html.twig',
+                {'employees': employees, 'previous': previous, 'next': next, 'current': current, 'qty': qty }) }}
+        {% endif %}
+        {% if step == 2 %}
+            {{ include('employee/update.html.twig', {'id': id, 'form': form  }) }}
+        {% endif %}
+        {% if step == 3 %}
+            {{ include('employee/new.html.twig', {'form': form }) }}
+        {% endif %}
+    </div>
+{% endblock %}

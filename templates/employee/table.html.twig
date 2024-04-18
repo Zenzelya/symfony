@@ -1,0 +1,131 @@
+{% block content %}
+    {% set queryParams = app.request.query.all %}
+    <div class="my-5 flex justify-between aline-center">
+        <div class="pagination">
+            {% if previous >= 0 %}
+                <a class="m-2 p-2 bg-green-500 text-white border border-green-500 rounded-md m-2 px-4 py-2"
+                   href="{{ url('app_employees_table', queryParams|merge({ offset: previous })) }}">Previous</a>
+            {% endif %}
+            {% if next < employees|length %}
+                <a class="m-2 p-2 bg-green-500 text-white border border-green-500 rounded-md m-2 px-4 py-2"
+                   href="{{ url('app_employees_table', queryParams|merge({ offset: next })) }}">Next</a>
+            {% endif %}
+        </div>
+        <div class="qty">
+
+            <a class=" rounded-md m-2 border border-black px-4 py-2 {{ qty == 5 ? 'bg-gray-600 text-white' : 'bg-white text-black' }}"
+               href="{{  url('app_employees_table', queryParams|merge({ qty: 5 })) }}"> 5 </a>
+            <a class="rounded-md m-2 border border-black px-4 py-2 {{ qty == 10 ? 'bg-gray-600 text-white' : 'bg-white text-black' }}"
+               href="{{  url('app_employees_table', queryParams|merge({ qty: 10 })) }}"> 10 </a>
+            <a class="rounded-md m-2 border border-black px-4 py-2 {{ qty == 20 ? 'bg-gray-600 text-white' : 'bg-white text-black' }}"
+               href="{{  url('app_employees_table', queryParams|merge({ qty: 20 })) }}"> 20 </a>
+            <a class="rounded-md m-2 border border-black px-4 py-2 {{ qty == 50 ? 'bg-gray-600 text-white' : 'bg-white text-black' }}"
+               href="{{  url('app_employees_table', queryParams|merge({ qty: 50 })) }}"> 50 </a>
+            <a class="bg-green-500 text-white rounded-md m-2 border border-green-500 px-4 py-2"
+               href="{{  url('app_employees_table') }}"> Clear All </a>
+        </div>
+    </div>
+    <table class="min-w-full divide-y divide-gray-200 mb-40">
+        <thead class="bg-gray-50">
+        <tr>
+            <th scope="col" class="px-6 w-30 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">
+                <a href="{{ url('app_employees_table', queryParams|merge({ offset: current, order: 'id' })) }}">ID</a></th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">
+                <a href="{{ url('app_employees_table', queryParams|merge({ offset: current, order: 'fullName' })) }}">Full Name</a></th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">
+                <a href="{{ url('app_employees_table', queryParams|merge({ offset: current, order: 'position' })) }}">Position</a></th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">
+                <a href="{{ url('app_employees_table', queryParams|merge({ offset: current, order: 'hireDate' })) }}">Hire Date</a></th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">
+                <a href="{{ url('app_employees_table', queryParams|merge({ offset: current, order: 'salary' })) }}">Salary</a></th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">
+                <a href="{{ url('app_employees_table', queryParams|merge({ offset: current, order: 'manager' })) }}">Manager</a></th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">Action</th>
+        </tr>
+        <tr>
+            <th scope="col" class="px-6 w-30 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">
+                <form action="{{ path('app_employees_table') }}" method="GET" class="flex">
+                    <input type="text" name="search_query" required pattern="\d+" title="numbers [0-9]"
+                           value="{{ app.request.query.get('search_type', '') == 'id' ? app.request.query.get('search_query', '') : '' }}"
+                           class="px-4 max-w-16 py-2 border">
+                    <button type="submit" class="px-2 w-12 py-2 border">Find</button>
+                    <input type="hidden" name="order" value="{{ app.request.query.get('order', 'id') }}">
+                    <input type="hidden" name="offset" value="{{ current }}">
+                    <input type="hidden" name="search_type" value="id">
+                </form>
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">
+                <form action="{{ path('app_employees_table') }}" method="GET" class="flex">
+                    <input type="text" name="search_query" required pattern="[A-Za-z\- ']+" title="Matches alphabetical characters (both uppercase and lowercase), hyphens, spaces, and apostrophes"
+                           value="{{ app.request.query.get('search_type', '') == 'fullName' ? app.request.query.get('search_query', '') : '' }}"
+                           class="px-2 max-w-24 py-2 border">
+                    <button type="submit" class="px-4 max-w-16 py-2 border">Find</button>
+                    <input type="hidden" name="order" value="{{ app.request.query.get('order', 'id') }}">
+                    <input type="hidden" name="offset" value="{{ current }}">
+                    <input type="hidden" name="search_type" value="fullName">
+                </form>
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">
+                <form action="{{ path('app_employees_table') }}" method="GET" class="flex">
+                    <input type="text" name="search_query" required pattern="[A-Za-z\- ']+" title="Matches alphabetical characters (both uppercase and lowercase), hyphens, spaces, and apostrophes"
+                           value="{{ app.request.query.get('search_type', '') == 'position' ? app.request.query.get('search_query', '') : '' }}"
+                           class="px-2 max-w-24 py-2 border">
+                    <button type="submit" class="px-4 max-w-16 py-2 border">Find</button>
+                    <input type="hidden" name="order" value="{{ app.request.query.get('order', 'id') }}">
+                    <input type="hidden" name="offset" value="{{ current }}">
+                    <input type="hidden" name="search_type" value="position">
+                </form>
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">
+                <form action="{{ path('app_employees_table') }}" method="GET" class="flex">
+                    <input type="text" name="search_query" required pattern="[\d-]+" title="Matches alphabetical characters (both uppercase and lowercase), hyphens, spaces, and apostrophes"
+                           value="{{ app.request.query.get('search_type', '') == 'hireDate' ? app.request.query.get('search_query', '') : '' }}"
+                           class="px-2 max-w-24 py-2 border">
+                    <button type="submit" class="px-4 max-w-16 py-2 border">Find</button>
+                    <input type="hidden" name="order" value="{{ app.request.query.get('order', 'id') }}">
+                    <input type="hidden" name="offset" value="{{ current }}">
+                    <input type="hidden" name="search_type" value="hireDate">
+                </form>
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">
+                <form action="{{ path('app_employees_table') }}" method="GET" class="flex">
+                    <input type="text" name="search_query" required pattern="\d+" title="Numbers only 0-9"
+                           value="{{ app.request.query.get('search_type', '') == 'salary' ? app.request.query.get('search_query', '') : '' }}"
+                           class="px-2 max-w-24 py-2 border">
+                    <button type="submit" class="px-4 max-w-16 py-2 border">Find</button>
+                    <input type="hidden" name="order" value="{{ app.request.query.get('order', 'id') }}">
+                    <input type="hidden" name="offset" value="{{ current }}">
+                    <input type="hidden" name="search_type" value="salary">
+                </form>
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider">
+                <form action="{{ path('app_employees_table') }}" method="GET" class="flex">
+                    <input type="text" name="search_query" required pattern="\d+" title="Matches alphabetical characters (both uppercase and lowercase), hyphens, spaces, and apostrophes"
+                           value="{{ app.request.query.get('search_type', '') == 'manager' ? app.request.query.get('search_query', '') : '' }}"
+                           class="px-2 max-w-24 py-2 border">
+                    <button type="submit" class="px-4 max-w-16 py-2 border">Find</button>
+                    <input type="hidden" name="order" value="{{ app.request.query.get('order', 'id') }}">
+                    <input type="hidden" name="offset" value="{{ current }}">
+                    <input type="hidden" name="search_type" value="manager">
+                </form>
+            </th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-indigo-600 uppercase tracking-wider"></th>
+        </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+        {% for employee in employees %}
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap">{{ employee.id }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ employee.fullName ?? '--' }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ employee.position ?? '--' }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ employee.hireDate ? employee.hireDate|date('d-m-Y') : '--' }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ employee.salary ?? '--' }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ employee.manager ?? '--' }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <a href="{{ url('app_employee_edit', {'id': employee.id }) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

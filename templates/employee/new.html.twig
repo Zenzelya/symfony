@@ -1,0 +1,36 @@
+{% block content %}
+    <div class="max-w-md mx-auto mt-8">
+            <h1 class="text-2xl font-bold mb-4">Create New Employee</h1>
+            <form action="{{ path('employee_new') }}" method="post" class="space-y-4">
+                {{ form_start(form) }}
+                <div>
+                    <label for="{{ form.fullName.vars.id }}" class="block text-sm font-medium text-gray-700">Full Name</label>
+                    {{ form_widget(form.fullName, { 'attr': {'class': 'block w-full border rounded p-2'} }) }}
+                </div>
+                <div>
+                    <label for="{{ form.position.vars.id }}" class="block text-sm font-medium text-gray-700">Position</label>
+                    {{ form_widget(form.position, { 'attr': {'class': 'block w-full border rounded p-2'} }) }}
+                </div>
+                <div>
+                    <label for="{{ form.hireDate.vars.id }}" class="block text-sm font-medium text-gray-700">Hire Date</label>
+                    {{ form_widget(form.hireDate, { 'attr': {'class': 'block w-full border rounded p-2'} }) }}
+                </div>
+                <div>
+                    <label for="{{ form.salary.vars.id }}" class="block text-sm font-medium text-gray-700">Salary</label>
+                    {{ form_widget(form.salary, { 'attr': {'class': 'block w-full border rounded p-2'} }) }}
+                </div>
+                <div>
+                    <label for="{{ form.manager.vars.id }}" class="block text-sm font-medium text-gray-700">Manager</label>
+                    {{ form_widget(form.manager, { 'attr': {'class': 'block w-full border rounded p-2'} }) }}
+                </div>
+{#                <div>#}
+{#                    <label for="{{ form.subordinates.vars.id }}" class="block text-sm font-medium text-gray-700">Subordinates</label>#}
+{#                    {{ form_widget(form.subordinates, { 'attr': {'class': 'block w-full border rounded p-2'} }) }}#}
+{#                </div>#}
+                <div>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Create Employee</button>
+                </div>
+                {{ form_end(form) }}
+            </form>
+        </div>
+{% endblock %}

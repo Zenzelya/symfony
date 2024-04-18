@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello EmployeeController!{% endblock %}
+
+{# templates/employee/index.html.twig #}
+
+{% block content %}
+    <h2>Hello World</h2>
+    {#<ul>
+        {% for employee in employees %}
+            {% if employee is defined %}
+                <li>{{ employee.fullName }} - {{ employee.position }}</li>
+                {% if employee.subordinates is not empty %}
+                    {{ include('employee/index.html.twig', {'employees': employee.subordinates}) }}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </ul>#}
+{% endblock %}
